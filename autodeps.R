@@ -3,11 +3,14 @@ fileName <- commandArgs(trailingOnly=TRUE)
 subfolder <- dirname(fileName)
 parsedFile <- parse(fileName)
 isIt <- function(e, what) as.character(e[[1]])==what
-isLoad <- function(e) isIt(e, "load")
 isSave <- function(e) isIt(e, "save")
+isLoad <- function(e) isIt(e, "load")
+
+whatIsSaved <- sapply(Filter(isSave, parsedFile), function(x) as.list(x)$file)
+if(length(whatIsSaved)==0)
+  quit("no")
 
 whatIsLoaded <- sapply(Filter(isLoad, parsedFile), "[[", 2)
-whatIsSaved <- sapply(Filter(isSave, parsedFile), function(x) as.list(x)$file)
 
 ##genearate Makefile targets
 if(FALSE) {
