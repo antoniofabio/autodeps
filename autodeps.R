@@ -1,3 +1,4 @@
+#!/usr/bin/Rscript
 fileName <- commandArgs(trailingOnly=TRUE)
 
 subfolder <- dirname(fileName)
@@ -13,9 +14,5 @@ if(length(whatIsSaved)==0)
 whatIsLoaded <- sapply(Filter(isLoad, parsedFile), "[[", 2)
 
 ##genearate Makefile targets
-if(FALSE) {
-  cat(paste(file.path(subfolder, whatIsSaved), collapse=" "), ": ", fileName, " ",
-      paste(file.path(subfolder, whatIsLoaded), collapse=" "), "\n", sep="")
-}
 cat(paste(whatIsSaved, collapse=" "), ": ", fileName, " ",
     paste(whatIsLoaded, collapse=" "), "\n", sep="")
