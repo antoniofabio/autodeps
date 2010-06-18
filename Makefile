@@ -11,7 +11,7 @@ sources := bau/analysis.R
 depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources))))
 
 show_dependencies:
-	@cat `find . -name .*.d`
+	@cat `find . -name ".*.d"`
 
 .%.d: %.R
 	Rscript autodeps.R $< > $@
