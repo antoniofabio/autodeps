@@ -2,11 +2,12 @@ R_OPTS := --no-save
 
 all: bau/analysis.RData
 sources := bau/analysis.R
+depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources))))
 
 .%.d: %.R
 	Rscript autodeps.R $< > $@
 
 %.RData: %.R
-	R CMD BATCH $(R_OPTS) $< $(basename $<).Rout
+	R CMD BATCH $(R_OPTS) $< $(dir $<).$(notdir $(basename $<)).Rout
 
-include $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources))))
+include $(depFiles)
