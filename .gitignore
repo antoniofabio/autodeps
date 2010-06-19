@@ -2,3 +2,6 @@ bau/analysis.d
 bau/analysis.Rout
 .Rhistory
 .*.d
+.*.Rout
+*.RData
+

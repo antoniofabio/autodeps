@@ -1,20 +1,23 @@
 R_OPTS := --no-save
 
-.PHONY: all show_dependencies
+.PHONY: all show-dependencies
 
 #OLD_SHELL := $(SHELL)
 #SHELL = $(warning [$@ ($^) ($?)])$(OLD_SHELL)
 
-all: bau/analysis.RData
-R_sources := $(filter-out ./autodeps.R,$(shell find . -name "*.R"))
-sources := bau/analysis.R
-depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources))))
+sources := $(filter-out ./autodeps.R,$(shell find . -name "*.R"))
 
-show_dependencies:
+include Makefile.config
+
+rdataFiles := $(sources:.R=.RData)
+depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources))))
+all: $(rdataFiles)
+
+show-dependencies:
 	@cat `find . -name ".*.d"`
 
 .%.d: %.R
-	Rscript autodeps.R $< > $@
+	@Rscript autodeps.R $< > $@
 
 %.RData: %.R
 	R CMD BATCH $(R_OPTS) $< $(dir $<).$(notdir $(basename $<)).Rout
