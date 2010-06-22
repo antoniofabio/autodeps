@@ -11,7 +11,7 @@ spaceSplit <- function(x) {
 childs <- lapply(sapply(contents, "[", 1), spaceSplit)
 parents <- lapply(sapply(contents, "[", 2), spaceSplit)
 allNodes <- union(unlist(childs), unlist(parents))
-nodesId <- seq_along(allNodes)
+nodesId <- seq_along(allNodes)-1
 names(nodesId) <- allNodes
 ## normalize child nodes: one element per list element:
 normalizeParents <- function(C, P) {
@@ -30,5 +30,5 @@ for(n in names(C1)) {
     e <- append(e, c(nodesId[n], nodesId[m]))
   }
 }
-L <- topological.sort(graph(e, directed=TRUE))[-1]
-cat(allNodes[L], sep="\n")
+L <- topological.sort(graph(e, directed=TRUE))
+cat(allNodes[L+1], sep="\n")
