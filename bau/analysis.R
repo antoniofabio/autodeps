@@ -3,7 +3,7 @@ load("bau/X.RData")
 
 x <- 1:3
 
-save(x, file="analysis.RData")
+save(x, file="bau/analysis.RData")
 
 save(x, file=paste("an", 1, ".RData", sep=""))
 
