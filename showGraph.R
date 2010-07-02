@@ -1,5 +1,8 @@
 #! /usr/bin/Rscript
-library(igraph)
+if(!require(igraph)) {
+  message("the `igraph' R package is needed to handle the dependencies graph")
+  quit(save="no", status=0)
+}
 
 contents <- strsplit(readLines(file("stdin")), ":")
 
@@ -11,24 +14,18 @@ spaceSplit <- function(x) {
 childs <- lapply(sapply(contents, "[", 1), spaceSplit)
 parents <- lapply(sapply(contents, "[", 2), spaceSplit)
 allNodes <- union(unlist(childs), unlist(parents))
-nodesId <- seq_along(allNodes)-1
-names(nodesId) <- allNodes
-## normalize child nodes: one element per list element:
-normalizeParents <- function(C, P) {
-  ans <- mapply(function(Ci, Pi) lapply(seq_along(Ci), function(ignore) Pi),
-                C, P, SIMPLIFY=FALSE)
-  return(Reduce(append, ans))
-}
-normalizeChilds <- function(C) unlist(C)
-C1 <- normalizeParents(parents, childs)
-P1 <- normalizeChilds(parents)
-names(C1) <- P1
-e <- numeric(0)
-for(n in names(C1)) {
-  c1n <- C1[[n]]
-  for(m in c1n) {
-    e <- append(e, c(nodesId[n], nodesId[m]))
+
+graphVec <- numeric(0)
+for(i in seq_along(parents)) {
+  pi <- parents[[i]]
+  ci <- childs[[i]]
+  for(pp in pi) for(cc in ci) {
+    graphVec <- append(graphVec,
+                         c(match(pp, allNodes),
+                           match(cc, allNodes)))
   }
 }
-L <- topological.sort(graph(e, directed=TRUE))
+graphVec <- graphVec-1
+
+L <- topological.sort(graph(graphVec, directed=TRUE))
 cat(allNodes[L+1], sep="\n")
