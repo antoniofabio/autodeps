@@ -1,10 +1,14 @@
 #! /usr/bin/Rscript
+f <- file("stdin")
+input <- readLines(f)
+close(f)
 if(!require(igraph, quietly=TRUE)) {
   message("the `igraph' R package is needed to handle the dependencies graph")
+  cat(input, sep="\n")
   quit(save="no", status=0)
 }
 
-contents <- strsplit(readLines(file("stdin")), ":")
+contents <- strsplit(input, ":")
 
 spaceSplit <- function(x) {
   ans <- unlist(strsplit(x, " +"))
@@ -25,7 +29,13 @@ for(i in seq_along(parents)) {
                            match(cc, allNodes)))
   }
 }
-graphVec <- graphVec-1
+g <- graph(graphVec-1, directed=TRUE)
+g <- set.graph.attribute(g, "label", value=allNodes)
 
-L <- topological.sort(graph(graphVec, directed=TRUE))
-cat(allNodes[L+1], sep="\n")
+L <- allNodes[topological.sort(g) + 1]
+L <- grep(".*\\.R$", L, invert=TRUE, value=TRUE)
+c1 <- sapply(childs, paste, collapse=" ")
+p1 <- sapply(parents, paste, collapse=" ")
+for(l in L) {
+  cat(l, ":", p1[grep(l, c1)], "\n")
+}

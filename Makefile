@@ -15,10 +15,7 @@ all: $(rdataFiles)
 
 show-dependencies:
 	@echo =Dependencies chain=
-	@cat `find . -name ".*.d"`
-	@echo
-	@echo =Topologically sorted RData file names=
-	@cat `find . -name ".*.d"`|./showGraph.R|grep .\.RData
+	@cat `find . -name ".*.d"`|./showGraph.R
 
 .%.d: %.R
 	@Rscript autodeps.R $< > $@
