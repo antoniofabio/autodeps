@@ -1,5 +1,5 @@
 #! /usr/bin/Rscript
-if(!require(igraph)) {
+if(!require(igraph, quietly=TRUE)) {
   message("the `igraph' R package is needed to handle the dependencies graph")
   quit(save="no", status=0)
 }
