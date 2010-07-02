@@ -14,7 +14,7 @@ depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources))))
 all: $(rdataFiles)
 
 show-dependencies:
-	@echo =Dependencies chain=
+	@echo "\033[0;1;37;40m=Dependencies chain=\033[0m"
 	@cat `find . -name ".*.d"`|./showGraph.R
 
 .%.d: %.R

@@ -36,6 +36,8 @@ L <- allNodes[topological.sort(g) + 1]
 L <- grep(".*\\.R$", L, invert=TRUE, value=TRUE)
 c1 <- sapply(childs, paste, collapse=" ")
 p1 <- sapply(parents, paste, collapse=" ")
+
 for(l in L) {
-  cat(l, ":", p1[grep(l, c1)], "\n")
+  l1 <- gsub("(.*)\\.RData", "\\1", l)
+  cat(sprintf("\033[0;1;36;40m%s\033[0m", l1), ":", p1[grep(l, c1)], "\n")
 }
