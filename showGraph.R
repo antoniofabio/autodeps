@@ -39,5 +39,17 @@ p1 <- sapply(parents, paste, collapse=" ")
 
 for(l in L) {
   l1 <- gsub("(.*)\\.RData", "\\1", l)
-  cat(sprintf("\033[0;1;36;40m%s\033[0m", l1), ":", p1[grep(l, c1)], "\n")
+  cat(sprintf("\033[0;1;36;40m%s\033[0m", l1), ":")
+  lgr <- grep(l, c1)
+  if(length(lgr)>0) {
+    p11 <- parents[[lgr]]
+    p11.R <- gsub("(.)\\.R$", "\\1",
+                  grep(".*\\.R$", p11, value=TRUE))
+    p11.RData <- gsub("(.)\\.RData$", "\\1",
+                      grep(".*\\.RData$", p11, value=TRUE))
+    p11.col <- c(sprintf("\033[0;0;32;40m%s\033[0m", p11.R),
+                 sprintf("\033[0;0;36;40m%s\033[0m", p11.RData))
+    cat(p11.col)
+  }
+  cat('\n')
 }
