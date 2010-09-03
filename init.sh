@@ -1,4 +1,5 @@
-echo ".Rhistory
+echo "auto
+.Rhistory
 .*.d
 .*.Rout
 *.RData
