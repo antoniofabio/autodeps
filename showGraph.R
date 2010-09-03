@@ -40,7 +40,7 @@ p1 <- sapply(parents, paste, collapse=" ")
 for(l in L) {
   l1 <- gsub("(.*)\\.RData", "\\1", l)
   cat(sprintf("\033[0;1;36;40m%s\033[0m", l1), ": ")
-  lgr <- grep(l, c1)
+  lgr <- which(l == c1)
   if(length(lgr)>0) {
     p11 <- parents[[lgr]]
     p11.R <- gsub("(.)\\.R$", "\\1",
