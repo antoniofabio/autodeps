@@ -8,3 +8,8 @@ bau/analysis.Rout
 report.R
 auto
 figures
+*.log
+*.aux
+Rplots.pdf
+report.tex
+*.pdf
