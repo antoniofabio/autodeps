@@ -7,6 +7,7 @@ R_OPTS := --no-save
 #SHELL = $(warning [$@ ($^) ($?)])$(OLD_SHELL)
 
 sources := $(filter-out ./autodeps.R,$(shell find . -name "*.R"))
+reports := 
 targets :=
 
 include Makefile.config
@@ -24,7 +25,10 @@ show-dependencies:
 %.RData: %.R .%.d
 	R CMD BATCH $(R_OPTS) $< $(dir $<).$(notdir $(basename $<)).Rout
 
-%.tex: %.Rnw
+%.R: %.Rnw
+	R CMD Stangle $<
+
+%.tex: %.Rnw %.R .%.d
 	R CMD Sweave $(notdir $<)
 %.aux: %.tex
 	pdflatex $(notdir $<)
@@ -32,3 +36,4 @@ show-dependencies:
 	pdflatex $(notdir $<)
 
 include $(depFiles)
+include $(join $(dir $(reports)),$(patsubst %.Rnw,.%.d, $(notdir $(reports))))
