@@ -1,0 +1,22 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{float}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+
+\setlength{\parindent}{0pt}
+
+\SweaveOpts{keep.source=TRUE, echo=FALSE, eps=FALSE, results=hide}
+\renewcommand{\familydefault}{\sfdefault}
+
+\title{TITLE}
+
+\begin{document}
+\maketitle
+
+\end{document}

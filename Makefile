@@ -21,14 +21,14 @@ show-dependencies:
 .%.d: %.R
 	@Rscript autodeps.R $< > $@
 
-%.RData: %.R
+%.RData: %.R .%.d
 	R CMD BATCH $(R_OPTS) $< $(dir $<).$(notdir $(basename $<)).Rout
 
-report/%.tex: report/%.Rnw
-	cd report; R CMD Sweave $(notdir $<)
-report/%.aux: report/%.tex
-	cd report; pdflatex $(notdir $<)
-report/%.pdf: report/%.tex report/%.aux
-	cd report; pdflatex $(notdir $<)
+%.tex: %.Rnw
+	R CMD Sweave $(notdir $<)
+%.aux: %.tex
+	pdflatex $(notdir $<)
+%.pdf: %.tex %.aux
+	pdflatex $(notdir $<)
 
 include $(depFiles)
