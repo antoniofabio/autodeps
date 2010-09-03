@@ -13,11 +13,11 @@ targets :=
 include Makefile.config
 
 rdataFiles := $(sources:.R=.RData)
-depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources))))
+depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources)))) $(join $(dir $(reports)),$(patsubst %.Rnw,.%.d, $(notdir $(reports))))
 all: $(rdataFiles) $(reports:.Rnw=.pdf) $(targets)
 
 show-dependencies:
-	@cat `find . -name ".*.d"`|./showGraph.R
+	@cat $(depFiles)|./showGraph.R
 
 .%.d: %.R
 	@Rscript autodeps.R $< > $@
@@ -36,4 +36,3 @@ show-dependencies:
 	pdflatex $(notdir $<)
 
 include $(depFiles)
-include $(join $(dir $(reports)),$(patsubst %.Rnw,.%.d, $(notdir $(reports))))
