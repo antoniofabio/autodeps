@@ -29,6 +29,12 @@ for(i in seq_along(parents)) {
                            match(cc, allNodes)))
   }
 }
+
+if(length(graphVec) == 0) {
+  message("there is nothing to be shown")
+  quit(save="no", status=0)
+}
+
 g <- graph(graphVec-1, directed=TRUE)
 g <- set.graph.attribute(g, "label", value=allNodes)
 
