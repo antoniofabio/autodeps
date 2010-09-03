@@ -11,12 +11,17 @@
 
 \setlength{\parindent}{0pt}
 
-\SweaveOpts{keep.source=TRUE, echo=FALSE, eps=FALSE, results=hide}
+\SweaveOpts{keep.source=TRUE, echo=FALSE, eps=FALSE, results=hide, prefix.string=figures/report}
 \renewcommand{\familydefault}{\sfdefault}
+\graphicspath{{figures/}}
 
 \title{TITLE}
 
 \begin{document}
 \maketitle
+
+<<init>>=
+options(width=70, digits=3)
+@
 
 \end{document}

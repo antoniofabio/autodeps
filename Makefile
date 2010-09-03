@@ -14,7 +14,7 @@ include Makefile.config
 
 rdataFiles := $(sources:.R=.RData)
 depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources))))
-all: $(rdataFiles) $(targets)
+all: $(rdataFiles) $(reports:.Rnw=.pdf) $(targets)
 
 show-dependencies:
 	@cat `find . -name ".*.d"`|./showGraph.R

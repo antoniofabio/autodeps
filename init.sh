@@ -4,6 +4,7 @@ echo "auto
 .*.Rout
 *.RData
 report.R
+figures
 " > .gitignore
 git init
 git add .gitignore autodeps.R showGraph.R report.R Makefile Makefile.config
