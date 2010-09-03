@@ -5,6 +5,7 @@ echo "auto
 *.RData
 *.pdf
 report.R
+report.tex
 figures
 *.aux
 *.log
