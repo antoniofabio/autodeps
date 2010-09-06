@@ -1,6 +1,6 @@
 R_OPTS := --no-save
 
-.PHONY: all show-dependencies
+.PHONY: all show-dependencies clean
 .DEFAULT_GOAL := all
 
 #OLD_SHELL := $(SHELL)
@@ -18,6 +18,9 @@ all: $(rdataFiles) $(reports:.Rnw=.pdf) $(targets)
 
 show-dependencies:
 	@cat $(depFiles)|./showGraph.R
+
+clean:
+	@rm -rf $(depFiles) *.aux *.log
 
 .%.d: %.R
 	@Rscript autodeps.R $< > $@
