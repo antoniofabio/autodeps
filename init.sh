@@ -1,3 +1,4 @@
+rm -rf .git
 echo "auto
 .Rhistory
 .*.d
