@@ -25,6 +25,7 @@ clean:
 	@rm -rf $(filter-out $(routFiles),$(shell find . -name ".*.Rout"))
 
 status:
+	@lsof $(shell find . -name ".*.Rout") |grep ^R
 	@tail -n 1 $(routFiles)
 
 .%.d: %.R
