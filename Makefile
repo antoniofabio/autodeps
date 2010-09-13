@@ -1,6 +1,6 @@
 R_OPTS := --no-save
 
-.PHONY: all show-dependencies clean
+.PHONY: all show-dependencies clean status
 .DEFAULT_GOAL := all
 
 #OLD_SHELL := $(SHELL)
@@ -23,6 +23,9 @@ show-dependencies:
 clean:
 	@rm -rf $(shell find . -name ".*.d") *.aux *.log
 	@rm -rf $(filter-out $(routFiles),$(shell find . -name ".*.Rout"))
+
+status:
+	@tail -n 1 $(routFiles)
 
 .%.d: %.R
 	@Rscript autodeps.R $< > $@
