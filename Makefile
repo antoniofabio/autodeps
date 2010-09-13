@@ -6,7 +6,7 @@ R_OPTS := --no-save
 #OLD_SHELL := $(SHELL)
 #SHELL = $(warning [$@ ($^) ($?)])$(OLD_SHELL)
 
-sources := $(filter-out ./autodeps.R,$(shell find . -name "*.R"))
+sources := $(filter-out ./autodeps.R ./showGraph.R,$(shell find . -name "*.R"))
 reports := 
 targets :=
 
@@ -14,13 +14,15 @@ include Makefile.config
 
 rdataFiles := $(sources:.R=.RData)
 depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources)))) $(join $(dir $(reports)),$(patsubst %.Rnw,.%.d, $(notdir $(reports))))
+routFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.Rout, $(notdir $(sources))))
 all: $(rdataFiles) $(reports:.Rnw=.pdf) $(targets)
 
 show-dependencies:
 	@cat $(depFiles)|./showGraph.R
 
 clean:
-	@rm -rf $(depFiles) *.aux *.log
+	@rm -rf $(shell find . -name ".*.d") *.aux *.log
+	@rm -rf $(filter-out $(routFiles),$(shell find . -name ".*.Rout"))
 
 .%.d: %.R
 	@Rscript autodeps.R $< > $@
