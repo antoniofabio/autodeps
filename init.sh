@@ -12,5 +12,5 @@ figures
 *.log
 " > .gitignore
 git init
-git add -f .gitignore autodeps.R showGraph.R init.sh report.Rnw Makefile Makefile.config
+git add -f .gitignore autodeps.R status.R showGraph.R init.sh report.Rnw Makefile Makefile.config
 git commit -m "initial commit"

@@ -25,7 +25,9 @@ clean:
 	@rm -rf $(filter-out $(routFiles),$(shell find . -name ".*.Rout"))
 
 status:
-	@lsof $(shell find . -name ".*.Rout") |grep ^R
+	@echo = currently running =
+	@lsof $(routFiles) | awk -F" " '/^R/ { print $$2, $$9 }' | ./status.R
+	@echo = already finished =
 	@tail -n 1 $(routFiles)
 
 .%.d: %.R
