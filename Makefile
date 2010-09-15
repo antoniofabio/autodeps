@@ -13,7 +13,8 @@ targets :=
 include Makefile.config
 
 rdataFiles := $(sources:.R=.RData)
-depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources)))) $(join $(dir $(reports)),$(patsubst %.Rnw,.%.d, $(notdir $(reports))))
+depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources)))) \
+	$(join $(dir $(reports)),$(patsubst %.Rnw,.%.Rnw.d, $(notdir $(reports))))
 routFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.Rout, $(notdir $(sources))))
 all: $(rdataFiles) $(reports:.Rnw=.pdf) $(targets)
 
@@ -33,13 +34,13 @@ status:
 .%.d: %.R
 	@Rscript autodeps.R $< > $@
 
+.%.Rnw.d: %.Rnw
+	@./.rnwDeps.R $< > $@
+
 %.RData: %.R .%.d
 	R CMD BATCH $(R_OPTS) $< $(dir $<).$(notdir $(basename $<)).Rout
 
-%.R: %.Rnw
-	R CMD Stangle $<
-
-%.tex: %.Rnw %.R .%.d
+%.tex: %.Rnw .%.Rnw.d
 	R CMD Sweave $(notdir $<)
 %.aux: %.tex
 	pdflatex $(notdir $<)

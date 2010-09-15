@@ -11,8 +11,6 @@ tryEval <- function(expr) tryCatch(eval(expr), error=function(ignore) NULL)
 
 whatIsSaved <- lapply(Filter(isSave, parsedFile), function(x) tryEval(as.list(x)$file))
 whatIsSaved <- unlist(Filter(is.character, whatIsSaved))
-if(length(whatIsSaved)==0)
-  quit("no")
 
 whatIsLoaded <- lapply(Filter(isLoad, parsedFile), function(x) tryEval(x[[2]]))
 whatIsLoaded <- unlist(Filter(is.character, whatIsLoaded))
