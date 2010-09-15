@@ -26,10 +26,7 @@ clean:
 	@rm -rf $(filter-out $(routFiles),$(shell find . -name ".*.Rout"))
 
 status:
-	@echo = currently running =
-	@lsof $(routFiles) | awk -F" " '/^R/ { print $$2, $$9 }' | ./status.R
-	@echo = already finished =
-	@tail -n 1 $(routFiles)
+	@./.status.R $(routFiles)
 
 .%.d: %.R
 	@Rscript autodeps.R $< > $@
