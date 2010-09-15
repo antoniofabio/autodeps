@@ -5,19 +5,20 @@ dropExt <- function(x) gsub(".(.*)\\..*", "\\1", x)
 baseNames <- dropExt(basename(fileNames))
 
 allPresentFiles <- fileNames[file.exists(fileNames)]
+allTouchedFiles <- c()
 cmd <- paste("lsof", paste(allPresentFiles, collapse=" "),
              "| awk -F\" \" '/^R/ { print $2, $9 }'")
 lsofOutput <- system(cmd, intern=TRUE)
-f <- textConnection(lsofOutput)
-d <- unique(read.delim(f, sep=" ", header=FALSE, as.is=TRUE))
-allTouchedFiles <- unique(d[[2]])
-close(f)
-pids <- d[[1]]
-nms <- dropExt(basename(d[[2]]))
-df <- data.frame(pid=pids)
-rownames(df) <- nms
-df <- df[sort(rownames(df)),,drop=FALSE]
-if(nrow(df)>0) {
+if(length(lsofOutput) > 0) {
+  f <- textConnection(lsofOutput)
+  d <- unique(read.delim(f, sep=" ", header=FALSE, as.is=TRUE))
+  close(f)
+  allTouchedFiles <- unique(d[[2]])
+  pids <- d[[1]]
+  nms <- dropExt(basename(d[[2]]))
+  df <- data.frame(pid=pids)
+  rownames(df) <- nms
+  df <- df[sort(rownames(df)),,drop=FALSE]
   message("=currently running=")
   print(df)
 }
