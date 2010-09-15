@@ -16,6 +16,7 @@ pids <- d[[1]]
 nms <- dropExt(basename(d[[2]]))
 df <- data.frame(pid=pids)
 rownames(df) <- nms
+df <- df[sort(rownames(df)),,drop=FALSE]
 if(nrow(df)>0) {
   message("=currently running=")
   print(df)
