@@ -6,7 +6,7 @@ R_OPTS := --no-save
 #OLD_SHELL := $(SHELL)
 #SHELL = $(warning [$@ ($^) ($?)])$(OLD_SHELL)
 
-sources := $(filter-out ./autodeps.R ./showGraph.R,$(shell find . -name "*.R"))
+sources :=
 reports := 
 targets :=
 
