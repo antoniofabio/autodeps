@@ -6,15 +6,13 @@ R_OPTS := --no-save
 #OLD_SHELL := $(SHELL)
 #SHELL = $(warning [$@ ($^) ($?)])$(OLD_SHELL)
 
-sources :=
-reports := 
+sources := $(wildcard *.R)
+reports := $(wildcard *.Rnw)
 targets :=
 
-include Makefile.config
-
-rdataFiles := $(sources:.R=.RData)
 depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources)))) \
 	$(join $(dir $(reports)),$(patsubst %.Rnw,.%.Rnw.d, $(notdir $(reports))))
+rdataFiles := $(shell cat $(depFiles) | ./.collectTargets.R)
 routFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.Rout, $(notdir $(sources))))
 all: $(rdataFiles) $(reports:.Rnw=.pdf) $(targets)
 
