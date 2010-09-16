@@ -24,7 +24,7 @@ if(length(lsofOutput) > 0) {
 }
 
 notYetExecuted <- baseNames[!file.exists(fileNames)]
-if(length(notYetExecuted) > 1) {
+if(length(notYetExecuted) > 0) {
   message("")
   message("=not yet executed=")
   message(paste(notYetExecuted, collapse=" "))
