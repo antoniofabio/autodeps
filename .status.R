@@ -23,7 +23,8 @@ if(length(lsofOutput) > 0) {
   print(df)
 }
 
-notYetExecuted <- baseNames[!file.exists(fileNames)]
+candidateRnw <- paste(dropExt(basename(fileNames)), ".Rnw", sep="")
+notYetExecuted <- baseNames[(!file.exists(fileNames)) & (!file.exists(candidateRnw))]
 if(length(notYetExecuted) > 0) {
   message("")
   message("=not yet executed=")
