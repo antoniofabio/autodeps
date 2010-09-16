@@ -17,7 +17,7 @@ routFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.Rout, $(notdir $(sources
 all: $(rdataFiles) $(reports:.Rnw=.pdf) $(targets)
 
 show-dependencies:
-	@cat $(depFiles)|./showGraph.R
+	@cat $(depFiles)|./.showGraph.R
 
 clean:
 	@rm -rf $(shell find . -name ".*.d") *.aux *.log
@@ -27,7 +27,7 @@ status:
 	@./.status.R $(routFiles)
 
 .%.d: %.R
-	@Rscript autodeps.R $< > $@
+	@Rscript .autodeps.R $< > $@
 
 .%.Rnw.d: %.Rnw
 	@./.rnwDeps.R $< > $@
