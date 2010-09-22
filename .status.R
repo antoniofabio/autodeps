@@ -15,11 +15,10 @@ getRunTime <- Vectorize(function(x) {
 })
 allTargetCmds <- grep("^R CMD BATCH.*", system("make -n all", intern=TRUE), value=TRUE)
 stringIn <- Vectorize(function(a) any(grepl(a, allTargetCmds)))
-df <- data.frame(script=baseNames,
-                 time=round(getRunTime(fileNames)/60, digits=1),
+df <- data.frame(time=round(getRunTime(fileNames)/60, digits=1),
                  uptodate=!stringIn(fileNames))
-rownames(df) <- seq_len(nrow(df))
-colnames(df)[2] <- "time (minutes)"
+rownames(df) <- baseNames
+colnames(df)[1] <- "time (minutes)"
 print(df)
 
 allPresentFiles <- fileNames[file.exists(fileNames)]
