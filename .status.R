@@ -3,6 +3,24 @@
 fileNames <- commandArgs(trailingOnly=TRUE)
 dropExt <- function(x) gsub(".(.*)\\..*", "\\1", x)
 baseNames <- dropExt(basename(fileNames))
+getRunTime <- Vectorize(function(x) {
+  if(file.exists(x)) {
+    return(suppressWarnings(as.numeric(gsub("^.*\\d+\\.\\d+.*\\d+\\.\\d+.*?(\\d+\\.\\d+).*",
+                                            "\\1",
+                                            system(paste("tail -n 1 ", x), intern=TRUE)
+                                            ))))
+  } else {
+    return(NA)
+  }
+})
+allTargetCmds <- grep("^R CMD BATCH.*", system("make -n all", intern=TRUE), value=TRUE)
+stringIn <- Vectorize(function(a) any(grepl(a, allTargetCmds)))
+df <- data.frame(script=baseNames,
+                 time=round(getRunTime(fileNames)/60, digits=1),
+                 uptodate=!stringIn(fileNames))
+rownames(df) <- seq_len(nrow(df))
+colnames(df)[2] <- "time (minutes)"
+print(df)
 
 allPresentFiles <- fileNames[file.exists(fileNames)]
 allTouchedFiles <- c()
@@ -23,29 +41,4 @@ if(length(allPresentFiles)>0) {
     message("=currently running=")
     print(df)
   }
-}
-
-candidateRnw <- paste(dropExt(basename(fileNames)), ".Rnw", sep="")
-notYetExecuted <- baseNames[(!file.exists(fileNames)) & (!file.exists(candidateRnw))]
-if(length(notYetExecuted) > 0) {
-  message("")
-  message("=not yet executed=")
-  message(paste(notYetExecuted, collapse=" "))
-}
-
-exId <- file.exists(fileNames) & (!(fileNames %in% allTouchedFiles))
-alreadyExecuted <- baseNames[exId]
-if(length(alreadyExecuted) > 0) {
-  message("")
-  message("=completed=")
-  fn <- fileNames[exId]
-  lastLine <- Vectorize(function(x) system(paste("tail -n 1 ", x), intern=TRUE))
-  lastLines <- lastLine(fn)
-  fn.times <- suppressWarnings(as.numeric(gsub("^.*\\d+\\.\\d+.*\\d+\\.\\d+.*?(\\d+\\.\\d+).*",
-                                               "\\1", lastLines)))
-  df <- data.frame(time=round(fn.times/60, digits=1))
-  rownames(df) <- alreadyExecuted
-  colnames(df) <- "time (minutes)"
-  df <- df[sort(rownames(df)),,drop=FALSE]
-  print(df)
 }
