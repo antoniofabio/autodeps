@@ -6,6 +6,8 @@ R_OPTS := --no-save
 #OLD_SHELL := $(SHELL)
 #SHELL = $(warning [$@ ($^) ($?)])$(OLD_SHELL)
 
+print-%: ; @echo $* is $($*)
+
 sources := $(wildcard *.R)
 reports := $(wildcard *.Rnw)
 targets :=
