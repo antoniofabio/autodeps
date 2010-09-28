@@ -23,7 +23,6 @@ show-dependencies:
 
 clean:
 	@rm -rf $(shell find . -name ".*.d") *.aux *.log
-	@rm -rf $(filter-out $(routFiles),$(shell find . -name ".*.Rout"))
 
 status:
 	@./.status.R $(routFiles)
@@ -34,10 +33,10 @@ status:
 .%.Rnw.d: %.Rnw
 	@./.rnwDeps.R $< > $@
 
-%.RData: %.R .%.d
+%.RData: %.R
 	R CMD BATCH $(R_OPTS) $< $(dir $<).$(notdir $(basename $<)).Rout
 
-%.tex: %.Rnw .%.Rnw.d
+%.tex: %.Rnw
 	R CMD Sweave $(notdir $<)
 %.aux: %.tex
 	pdflatex $(notdir $<)
