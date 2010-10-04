@@ -2,7 +2,13 @@
 fileName <- commandArgs(trailingOnly=TRUE)
 
 subfolder <- dirname(fileName)
-parsedFile <- parse(fileName)
+parsedFile <- tryCatch(parse(fileName),
+                       error=function(e) {
+                         message("can't parse R source file ", shQuote(fileName))
+                         message(e)
+                         message("")
+                         quit("no", status=1)
+                       })
 isIt <- function(e, what) as.character(e[[1]])==what
 isSave <- function(e) isIt(e, "save")
 isLoad <- function(e) isIt(e, "load")
