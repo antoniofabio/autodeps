@@ -14,11 +14,11 @@ targets :=
 
 depFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.d, $(notdir $(sources)))) \
 	$(join $(dir $(reports)),$(patsubst %.Rnw,.%.Rnw.d, $(notdir $(reports))))
-rdataFiles := $(shell cat $(depFiles) | ./.collectTargets.R)
+rdataFiles := $(shell ./.collectTargets.R $(depFiles))
 routFiles := $(join $(dir $(sources)),$(patsubst %.R,.%.Rout, $(notdir $(sources))))
 all: $(rdataFiles) $(reports:.Rnw=.pdf) $(targets)
 
-show-dependencies:
+show-dependencies: $(depFiles)
 	@cat $(depFiles)|./.showGraph.R
 
 clean:
@@ -28,7 +28,7 @@ status:
 	@./.status.R $(routFiles)
 
 .%.d: %.R
-	@Rscript .autodeps.R $< > $@
+	@./.autodeps.R $< > $@
 
 .%.Rnw.d: %.Rnw
 	@./.rnwDeps.R $< > $@
@@ -43,4 +43,4 @@ status:
 %.pdf: %.tex %.aux
 	pdflatex $(notdir $<)
 
-include $(depFiles)
+include $(shell for f in $(depFiles); do if [ -e $f ]; then echo $f; fi; done)
