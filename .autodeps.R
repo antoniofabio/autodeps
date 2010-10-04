@@ -1,4 +1,4 @@
-#!/usr/bin/Rscript
+#!/usr/bin/env Rscript
 fileName <- commandArgs(trailingOnly=TRUE)
 
 subfolder <- dirname(fileName)
