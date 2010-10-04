@@ -46,4 +46,4 @@ status:
 %.pdf: %.tex %.aux
 	pdflatex $(notdir $<)
 
-include $(call filter-existing,$(depFiles))
+include $(depFiles)
