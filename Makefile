@@ -1,6 +1,6 @@
 R_OPTS := --no-save
 
-.PHONY: all show-dependencies clean status
+.PHONY: all show-dependencies clean status md5sums md5check
 .DEFAULT_GOAL := all
 
 #OLD_SHELL := $(SHELL)
@@ -9,7 +9,7 @@ R_OPTS := --no-save
 print-%: ; @echo $* is $($*)
 
 # get only existing files from the list
-filter-existing=$(shell for f in $1; do if [ -e $f ]; then echo $f; fi; done)
+filter-existing=$(shell for f in $1; do if [ -e $$f ]; then echo $$f; fi; done)
 
 sources := $(wildcard *.R)
 reports := $(wildcard *.Rnw)
@@ -36,14 +36,22 @@ status:
 .%.Rnw.d: %.Rnw
 	@./.rnwDeps.R $< > $@
 
-%.RData: %.R
+%.RData: %.R .%.d
 	R CMD BATCH $(R_OPTS) $< $(dir $<).$(notdir $(basename $<)).Rout
 
-%.tex: %.Rnw
+%.tex: %.Rnw .%.Rnw.d
 	R CMD Sweave $(notdir $<)
 %.aux: %.tex
 	pdflatex $(notdir $<)
 %.pdf: %.tex %.aux
 	pdflatex $(notdir $<)
 
-include $(depFiles)
+md5sums.txt: $(rdataFiles)
+	md5sum $^ > $@
+
+md5sums: md5sums.txt
+
+md5check:
+	md5sum -c md5sums.txt
+
+include $(call filter-existing,$(depFiles))
