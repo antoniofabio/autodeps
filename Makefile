@@ -2,7 +2,7 @@ include .gmsl
 
 R_OPTS := --no-save
 
-.PHONY: all show-dependencies clean status md5sums md5check
+.PHONY: all show-dependencies clean status md5sums md5check check
 .DEFAULT_GOAL := all
 
 # OLD_SHELL := $(SHELL)
@@ -58,5 +58,8 @@ md5sums: md5sums.txt
 
 md5check:
 	md5sum -c md5sums.txt
+
+check:
+	@./.checkSave.R $(sources)
 
 include $(depFiles)
