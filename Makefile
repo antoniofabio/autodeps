@@ -62,4 +62,7 @@ md5check:
 check:
 	@./.checkSave.R $(sources)
 
+fix:
+	@./.fixSave_interactive.R $(sources)
+
 include $(depFiles)
