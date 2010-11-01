@@ -10,19 +10,23 @@ checkSave <- function(fileName) {
   }
   isIt <- Vectorize(function(e, what) as.character(e[[1]])==what)
   isSave <- function(e) isIt(e, "save")
-  return(sum(isSave(parsedFile)))
+  saves <- parsedFile[isSave(parsedFile)]
+  return(sapply(saves, "[[", "file", USE.NAMES=FALSE))
 }
 
-howManySaves <- Vectorize(checkSave)(fileNames)
-names(howManySaves) <- fileNames
+whatIsSaved <- Vectorize(checkSave)(fileNames)
+names(whatIsSaved) <- fileNames
 
-if(any(is.na(howManySaves))) {
+whatIsNA <- sapply(whatIsSaved, is.na)
+if(any(whatIsNA)) {
   message("= can't parse correctly =")
-  writeLines(paste(fileNames[is.na(howManySaves)], collapse=", "))
-  fileNames <- fileNames[!is.na(howManySaves)]
-  howManySaves <- howManySaves[!is.na(howManySaves)]
+  writeLines(paste(fileNames[whatIsNA], collapse=", "))
+  whatIsSaved <- whatIsSaved[!whatIsNA]
+  fileNames <- fileNames[!whatIsNA]
+  names(whatIsSaved) <- fileNames
 }
 
+howManySaves <- sapply(whatIsSaved, length)
 if(sum(howManySaves==0) > 0) {
   message("= not saving anything =")
   writeLines(paste(fileNames[howManySaves == 0], collapse=", "))
@@ -30,5 +34,20 @@ if(sum(howManySaves==0) > 0) {
 
 if(sum(howManySaves>1) > 0) {
   message("= saving more than one .RData file =")
-  writeLines(paste(fileNames[howManySaves > 1], collapse=", "))
+  for(sourceName in names(whatIsSaved)) {
+    message(sourceName, ": ", paste(fileNames[howManySaves > 1], collapse=", "))
+  }
+}
+
+savesOne <- howManySaves == 1
+savesOne.src <- fileNames[savesOne]
+savesOne.observed <- whatIsSaved[savesOne]
+savesOne.expected <- gsub("(.*)\\.R$", "\\1.RData", savesOne.src)
+savesOne.bad <- savesOne.observed != savesOne.expected
+if(any(savesOne.bad)) {
+  message("= nonstandard output filenames =")
+  df <- data.frame(source = savesOne.src, observed = savesOne.observed,
+                   expected = savesOne.expected)
+  df <- df[savesOne.bad,]
+  print(df, row.names=FALSE)
 }
