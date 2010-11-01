@@ -1,15 +1,19 @@
+include .gmsl
+
 R_OPTS := --no-save
 
 .PHONY: all show-dependencies clean status md5sums md5check
 .DEFAULT_GOAL := all
 
-#OLD_SHELL := $(SHELL)
-#SHELL = $(warning [$@ ($^) ($?)])$(OLD_SHELL)
+# OLD_SHELL := $(SHELL)
+# SHELL = $(warning [$@ ($^) ($?)])$(OLD_SHELL)
 
 print-%: ; @echo $* is $($*)
 
 # get only existing files from the list
 filter-existing=$(shell for f in $1; do if [ -e $$f ]; then echo $$f; fi; done)
+# set difference
+list_diff=$(call set_remove, $(call set_create, $2),$(call set_create,$1))
 
 sources := $(wildcard *.R)
 reports := $(wildcard *.Rnw)
@@ -25,7 +29,8 @@ show-dependencies: $(depFiles)
 	@cat $(depFiles)|./.showGraph.R
 
 clean:
-	@rm -rf $(shell find . -name ".*.d") *.aux *.log
+	@rm -f $(call list_diff, $(shell find . -name ".*.d"), $(depFiles))
+	@rm -f *.aux *.log
 
 status:
 	@./.status.R $(routFiles)
