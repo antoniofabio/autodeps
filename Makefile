@@ -59,4 +59,4 @@ md5sums: md5sums.txt
 md5check:
 	md5sum -c md5sums.txt
 
-include $(call filter-existing,$(depFiles))
+include $(depFiles)
