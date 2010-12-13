@@ -1,4 +1,4 @@
-#! /usr/bin/Rscript
+#!/usr/bin/env Rscript
 f <- file("stdin")
 input <- readLines(f)
 close(f)
