@@ -43,11 +43,20 @@ L <- grep(".*\\.R$", L, invert=TRUE, value=TRUE)
 c1 <- sapply(childs, paste, collapse=" ")
 p1 <- sapply(parents, paste, collapse=" ")
 
+humanCollapse <- function(x) {
+  if(length(x) > 1) {
+    xHead <- paste(head(x, length(x)-1), collapse=", ")
+    return(paste(xHead, "and", tail(x, 1)))
+  } else {
+    return(x)
+  }
+}
+
 for(l in L) {
   l1 <- gsub("(.*)\\.RData", "\\1", l)
   cat(sprintf("\033[0;1;36;40m%s\033[0m", l1), ": ")
   lgr <- which(l == c1)
-  if(length(lgr)>0) {
+  if(length(lgr)==1) {
     p11 <- parents[[lgr]]
     p11.R <- gsub("(.)\\.R$", "\\1",
                   grep(".*\\.R$", p11, value=TRUE))
@@ -56,6 +65,11 @@ for(l in L) {
     p11.col <- c(sprintf("\033[0;0;32;40m%s\033[0m", p11.R),
                  sprintf("\033[0;0;36;40m%s\033[0m", p11.RData))
     cat(p11.col)
+  } else if (length(lgr) > 1) {
+    pp <- unlist(parents[lgr])
+    pp <- sQuote(grep(".*\\.R$", pp, value=TRUE))
+    pp <- humanCollapse(pp)
+    message(sprintf("scripts %s are saving to the file %s", pp, sQuote(l)))
   }
   cat('\n')
 }
