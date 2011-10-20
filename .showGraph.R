@@ -54,7 +54,7 @@ humanCollapse <- function(x) {
 
 for(l in L) {
   l1 <- gsub("(.*)\\.RData", "\\1", l)
-  cat(sprintf("\033[0;1;36;40m%s\033[0m", l1), ": ")
+  cat(sprintf("\033[0;32m%s\033[0m", l1), ": ")
   lgr <- which(l == c1)
   if(length(lgr)==1) {
     p11 <- parents[[lgr]]
@@ -62,8 +62,7 @@ for(l in L) {
                   grep(".*\\.R$", p11, value=TRUE))
     p11.RData <- gsub("(.)\\.RData$", "\\1",
                       grep(".*\\.RData$", p11, value=TRUE))
-    p11.col <- c(sprintf("\033[0;0;32;40m%s\033[0m", p11.R),
-                 sprintf("\033[0;0;36;40m%s\033[0m", p11.RData))
+    p11.col <- sprintf("\033[1;30m%s\033[0m", p11.RData)
     cat(p11.col)
   } else if (length(lgr) > 1) {
     pp <- unlist(parents[lgr])
