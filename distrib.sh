@@ -1,1 +1,1 @@
-tar czf autodeps.tar.gz Makefile .gmsl .__gmsl .*.R
+tar czf autodeps.tar.gz Makefile .gmsl .__gmsl .*.R showTarget.sh
