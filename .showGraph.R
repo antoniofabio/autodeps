@@ -63,6 +63,8 @@ for(l in L) {
     p11.RData <- gsub("(.)\\.RData$", "\\1",
                       grep(".*\\.RData$", p11, value=TRUE))
     p11.col <- sprintf("\033[1;30m%s\033[0m", p11.RData)
+    p11.col <- c(sprintf("\033[0;33m%s\033[0m", p11.R),
+                 sprintf("\033[1;32m%s\033[0m", p11.RData))
     cat(p11.col)
   } else if (length(lgr) > 1) {
     pp <- unlist(parents[lgr])
