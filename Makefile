@@ -28,6 +28,9 @@ all: $(depFiles) $(rdataFiles) $(reports:.Rnw=.pdf) $(targets)
 show-dependencies: $(depFiles)
 	@cat $(depFiles)|./.showGraph.R
 
+show-leaves: $(depFiles)
+	@cat $(depFiles)|./.showLeaves.R
+
 clean:
 	@rm -f $(call list_diff, $(shell find . -name ".*.d"), $(depFiles))
 	@rm -f *.aux *.log
