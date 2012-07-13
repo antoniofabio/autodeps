@@ -1,0 +1,61 @@
+- autodeps -
+
+Automatically track -some- dependencies among your R files in your data analysis
+project.
+
+The rationale is that you split your data analysis steps in small (in
+principle), self-contained scripts which load one or more input data files and
+stores one output file at the end. Dependencies across files (i.e., what to
+re-run when some data or some script is modified) can be managed by the gnu make
+utility.
+
+As long as you follow some simple conventions, dependencies across the R scripts
+can be determined automatically.
+
+- Conventions
+
+Only toplevel 'save' and 'load' instructions are parsed. I.e.,
+if(TRUE) load("foo.RData")
+will be happily ignored.
+
+- Usage
+
+You can rapidly skim all the currently determined dependencies by typing:
+$ make show-dependencies
+
+You can focus on the dependencies required to make one specific target by typing:
+$ ./showTarget.sh desiredTarget.RData
+
+You can inspect the current status (what's uptodate, if there are computations
+ongoing) with:
+$ make status
+
+Inspect what needs to be updated with a dry run of make:
+$ make -n
+
+Make use of multiple cpus by using the '-j' switch of gnu make (see gmake
+documentation):
+$ make -k -j 3
+
+- Known bugs and limitations
+
+If there is a syntax error in an R file (even one which is not used), the whole
+machinery stops, complaining for that single syntax error.
+
+`make status` fails if a script is running which spawned child processes (e.g.,
+for parallel computing).
+
+If some R scripts are removed/renamed, dangling '.d' files will remain in the
+current folder.
+
+All R scripts are assumed to live within one toplevel folder (i.e., no
+subfolders).
+
+- Internals
+
+The script '.autodeps.R' is responsible for scanning an R file and producing a
+corresponding Make-compliant dependency statement.
+
+The script '.showGraph.R' is responsible for scanning the dependecies statements
+and produce a 'pretty', colored graph on the terminal.
+
