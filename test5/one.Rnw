@@ -1,0 +1,11 @@
+\documentclass{article}
+\usepackage{Sweave}
+
+\begin{document}
+<<>>=
+load("zero.RData")
+
+"hello"
+@
+
+\end{document}

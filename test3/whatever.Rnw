@@ -1,0 +1,8 @@
+\documentclass{article}
+
+<<>>=
+load("three.RData")
+@
+
+\begin{document}
+\end{document}

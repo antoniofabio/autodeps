@@ -4,7 +4,6 @@ bau/analysis.Rout
 .*.d
 .*.Rout
 *.RData
-
 report.R
 auto
 figures
@@ -14,3 +13,8 @@ Rplots.pdf
 report.tex
 *.pdf
 autodeps.tar.gz
+test*/Makefile
+test*/.*.R
+test*/.*gmsl*
+test*/showTarget.sh
+test*/*.tex
