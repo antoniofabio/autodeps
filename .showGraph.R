@@ -35,10 +35,10 @@ if(length(graphVec) == 0) {
   quit(save="no", status=0)
 }
 
-g <- graph(graphVec-1, directed=TRUE)
+g <- graph(graphVec, directed=TRUE)
 g <- set.graph.attribute(g, "label", value=allNodes)
 
-L <- allNodes[topological.sort(g) + 1]
+L <- allNodes[topological.sort(g)]
 L <- grep(".*\\.R$", L, invert=TRUE, value=TRUE)
 c1 <- sapply(childs, paste, collapse=" ")
 p1 <- sapply(parents, paste, collapse=" ")
